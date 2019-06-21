@@ -1,6 +1,6 @@
 {
     "name": "@levels3d/offblast",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Hooks and Suspense wrapper for Relay",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -8,6 +8,13 @@
     "author": "LevelS3D Dev <dev@levels3d.com>",
     "license": "MIT",
     "private": false,
+    "keywords": [
+        "react",
+        "relay",
+        "graphql",
+        "hooks",
+        "suspense"
+    ],
     "scripts": {
         "prepublish": "tsc"
     },
