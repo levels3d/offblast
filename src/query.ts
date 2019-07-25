@@ -115,9 +115,12 @@ export function useQuery<T extends OperationBase>(
         if (skipLookup && skipExecute) {
             return;
         }
+
         if (environment.check(operation.root)) {
             const snapshot = environment.lookup(operation.fragment);
-            const disposable = environment.subscribe(snapshot, () => {
+            const retain = environment.retain(operation.root);
+
+            const subscribe = environment.subscribe(snapshot, () => {
                 if (environment.check(operation.root)) {
                     const { data } = environment.lookup(operation.fragment);
                     setData(data || null);
@@ -125,9 +128,13 @@ export function useQuery<T extends OperationBase>(
                     setData(null);
                 }
             });
-            return () => disposable.dispose();
+
+            return () => {
+                retain.dispose();
+                subscribe.dispose();
+            };
         }
-    });
+    }, [skipLookup, skipExecute, environment, operation, data, setData]);
 
     if (data !== null) {
         return Suspender.resolve(data);

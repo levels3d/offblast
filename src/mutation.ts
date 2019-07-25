@@ -25,7 +25,7 @@ export interface MutationConfig<T extends OperationBase> {
     updater?: SelectorStoreUpdater<T['response']>;
 }
 
-type Cancelable<T> = Promise<T> & {
+export type Cancelable<T> = Promise<T> & {
     cancel(): void;
 };
 
