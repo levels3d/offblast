@@ -136,6 +136,15 @@ export function useQuery<T extends OperationBase>(
         }
     }, [skipLookup, skipExecute, environment, operation, data, setData]);
 
+    const request = useRef<Suspender<T['response'] | null> | null>(null);
+    const cancelled = useRef(false);
+    useEffect(
+        () => () => {
+            cancelled.current = true;
+        },
+        [],
+    );
+
     if (data !== null) {
         return Suspender.resolve(data);
     }
@@ -144,11 +153,17 @@ export function useQuery<T extends OperationBase>(
         return Suspender.resolve(null);
     }
 
-    return Suspender.observable(
-        environment.execute({ operation }).map(() => {
-            const { data = null } = environment.lookup(operation.fragment);
-            setData(data);
-            return data;
-        }),
-    );
+    if (request.current === null) {
+        request.current = Suspender.observable(
+            environment.execute({ operation }).map(() => {
+                const { data = null } = environment.lookup(operation.fragment);
+                if (!cancelled.current) {
+                    setData(data);
+                }
+                return data;
+            }),
+        );
+    }
+
+    return request.current;
 }

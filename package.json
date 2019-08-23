@@ -1,6 +1,6 @@
 {
     "name": "@levels3d/offblast",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Hooks and Suspense wrapper for Relay",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
